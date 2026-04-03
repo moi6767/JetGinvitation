@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jesse & Gaëlle · 5 Septembre 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <!-- ============================================================
+       CONFIGURATION GOOGLE FORMS
+       Remplacez les valeurs ci-dessous par celles de votre formulaire.
+       Consultez le guide GUIDE-CONFIGURATION.txt fourni avec ce fichier.
+  ============================================================ -->
+  <script>
+    const GOOGLE_FORM_CONFIG = {
+      formId:              "1FAIpQLSfZaSeW-JWV9Iqk9-HXq2QsDSewJFnkmW-ZOwvvLli3FsXeNQ",   // Ex: "1FAIpQLSe..."
+      entry_nom:           "entry.1802932395", // Champ Nom
+      entry_prenom:        "entry.688910547", // Champ Prénom
+      entry_email:         "entry.1813502819", // Champ Adresse email
+      entry_present:       "entry.2024064772", // Champ Présent (Oui / Non)
+      entry_nb_adultes:    "entry.1304912392", // Champ Nombre d'adultes
+      entry_nb_enfants:    "entry.1395020534", // Champ Nombre d'enfants
+      entry_adult_names:   "entry.2072898767", // Champ Prénoms des adultes (texte)
+      entry_child_info:    "entry.661583812", // Champ Infos enfants (texte)
+    };
+  </script>
+  <!-- ============================================================ -->
+
+  <style>
+    :root {
+      --navy:        #0B1A38;
+      --navy-light:  #102244;
+      --navy-mid:    #162B52;
+      --gold:        #C9A84C;
+      --gold-light:  #E8C97A;
+      --gold-dark:   #A0782A;
+      --gold-subtle: rgba(201,168,76,0.25);
+      --white:       #F9F4E8;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--navy);
+      font-family: 'Raleway', sans-serif;
+      color: var(--white);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ─── Scrollbar ─── */
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: var(--navy); }
+    ::-webkit-scrollbar-thumb { background: var(--gold-dark); border-radius: 3px; }
+
+    /* ─── Animations ─── */
+    @keyframes fadeUp   { from { opacity:0; transform:translateY(22px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes shimmer  { 0% { background-position:-200% center; } 100% { background-position:200% center; } }
+    @keyframes starPulse{ 0%,100%{transform:translateY(0) scale(1); opacity:.5;} 50%{transform:translateY(-8px) scale(1.1); opacity:1;} }
+    @keyframes spin     { to { transform: rotate(360deg); } }
+    @keyframes glow     { 0%,100%{box-shadow:0 0 18px rgba(201,168,76,.15);} 50%{box-shadow:0 0 32px rgba(201,168,76,.3);} }
+    @keyframes checkIn  { from{stroke-dashoffset:40;} to{stroke-dashoffset:0;} }
+
+    .fade-up   { animation: fadeUp .65s ease both; }
+    .fade-up-1 { animation: fadeUp .65s .10s ease both; }
+    .fade-up-2 { animation: fadeUp .65s .20s ease both; }
+    .fade-up-3 { animation: fadeUp .65s .35s ease both; }
+    .fade-up-4 { animation: fadeUp .65s .50s ease both; }
+    .fade-up-5 { animation: fadeUp .65s .65s ease both; }
+
+    .gold-shimmer {
+      background: linear-gradient(90deg,var(--gold-dark) 0%,var(--gold-light) 40%,var(--gold) 50%,var(--gold-light) 60%,var(--gold-dark) 100%);
+      background-size: 200% auto;
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: shimmer 4s linear infinite;
+    }
+
+    /* ─── Background stars ─── */
+    .stars-bg {
+      position: fixed; inset: 0; pointer-events: none; overflow: hidden; z-index: 0;
+    }
+    .star {
+      position: absolute; border-radius: 50%;
+      background: var(--gold);
+      animation: starPulse var(--dur, 4s) ease-in-out var(--delay, 0s) infinite;
+    }
+
+    /* ─── Layout ─── */
+    .page {
+      position: relative; z-index: 1;
+      display: flex; flex-direction: column; align-items: center;
+      padding: 48px 16px 72px;
+      min-height: 100vh;
+    }
+
+    /* ─── Header ─── */
+    .header { text-align: center; margin-bottom: 44px; max-width: 520px; width: 100%; }
+
+    .eyebrow {
+      font-size: 10px; letter-spacing: 5px; text-transform: uppercase;
+      color: var(--gold); font-weight: 500; margin-bottom: 16px;
+    }
+
+    .names {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(52px,13vw,82px);
+      font-weight: 300; line-height: 1.05;
+    }
+    .names .amp {
+      display: block; font-style: italic;
+      color: rgba(249,244,232,.75);
+      font-size: clamp(30px,7.5vw,48px);
+      margin: 6px 0;
+    }
+
+    .intro {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 17px; font-style: italic;
+      color: rgba(249,244,232,.72);
+      line-height: 1.9; max-width: 400px; margin: 0 auto;
+    }
+
+    /* ─── Dividers ─── */
+    .line-ornament {
+      display: flex; align-items: center; justify-content: center; gap: 14px;
+      margin: 20px 0;
+    }
+    .line-ornament .line {
+      height: 1px; width: 64px;
+    }
+    .line-ornament .line-l { background: linear-gradient(90deg,transparent,rgba(201,168,76,.55)); }
+    .line-ornament .line-r { background: linear-gradient(90deg,rgba(201,168,76,.55),transparent); }
+
+    .diamond-divider {
+      display: flex; align-items: center; gap: 12px; margin: 4px 0;
+    }
+    .diamond-divider .dl { flex:1; height:1px; background:linear-gradient(90deg,transparent,rgba(201,168,76,.3)); }
+    .diamond-divider .dr { flex:1; height:1px; background:linear-gradient(90deg,rgba(201,168,76,.3),transparent); }
+
+    /* ─── Card ─── */
+    .card {
+      width: 100%; max-width: 504px;
+      background: linear-gradient(155deg, var(--navy-mid) 0%, var(--navy-light) 100%);
+      border: 1px solid rgba(201,168,76,.28);
+      border-radius: 14px;
+      box-shadow: 0 28px 90px rgba(0,0,0,.55), inset 0 1px 0 rgba(201,168,76,.18);
+      padding: clamp(24px,6vw,46px);
+      position: relative; overflow: hidden;
+      animation: glow 5s ease-in-out infinite;
+    }
+
+    /* Corner brackets */
+    .card::before, .card::after,
+    .card .corner-br, .card .corner-bl {
+      content: '';
+      position: absolute;
+      width: 18px; height: 18px;
+      opacity: .38;
+    }
+    .card::before  { top:13px;    left:13px;  border-top:1px solid var(--gold); border-left:1px solid var(--gold); }
+    .card::after   { top:13px;    right:13px; border-top:1px solid var(--gold); border-right:1px solid var(--gold); }
+    .card .corner-br { bottom:13px; right:13px; border-bottom:1px solid var(--gold); border-right:1px solid var(--gold); }
+    .card .corner-bl { bottom:13px; left:13px;  border-bottom:1px solid var(--gold); border-left:1px solid var(--gold); }
+
+    .card-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 23px; font-style: italic;
+      color: var(--gold-light);
+      text-align: center; margin-bottom: 4px;
+    }
+
+    /* ─── Form elements ─── */
+    .form-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-group  { display: flex; flex-direction: column; gap: 0; }
+
+    label {
+      display: block;
+      font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+      color: var(--gold); font-weight: 500; margin-bottom: 8px;
+    }
+
+    input, select {
+      width: 100%; padding: 13px 16px;
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(201,168,76,.22);
+      border-radius: 5px;
+      color: var(--white);
+      font-family: 'Raleway', sans-serif; font-size: 14px;
+      transition: border-color .25s, background .25s, box-shadow .25s;
+      outline: none; appearance: none; -webkit-appearance: none;
+    }
+    input:focus, select:focus {
+      border-color: var(--gold);
+      background: rgba(201,168,76,.07);
+      box-shadow: 0 0 0 3px rgba(201,168,76,.12);
+    }
+    input::placeholder { color: rgba(249,244,232,.28); }
+    select option      { background: var(--navy-mid); color: var(--white); }
+
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; }
+    input[type="number"] { -moz-appearance: textfield; }
+
+    .field-error {
+      font-size: 10px; color: #e07070; margin-top: 5px;
+      display: none;
+    }
+    .field-error.visible { display: block; }
+
+    /* Ages block */
+    .ages-block {
+      background: rgba(201,168,76,.05);
+      border: 1px solid rgba(201,168,76,.18);
+      border-radius: 8px; padding: 18px 20px;
+      margin-top: 4px;
+    }
+    .ages-block .block-label {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 15px; font-style: italic;
+      color: var(--gold); margin-bottom: 14px;
+    }
+    .ages-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(108px,1fr));
+      gap: 12px;
+    }
+    .age-wrap { position: relative; }
+    .age-wrap input { padding-right: 36px; }
+    .age-unit {
+      position: absolute; right: 12px; top: 50%;
+      transform: translateY(-50%);
+      font-size: 11px; color: rgba(249,244,232,.35);
+      pointer-events: none;
+    }
+
+    /* Button */
+    .btn-primary {
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      width: 100%; padding: 17px 32px; margin-top: 8px;
+      background: linear-gradient(135deg, var(--gold-dark), var(--gold), var(--gold-light));
+      border: none; border-radius: 5px;
+      color: var(--navy);
+      font-family: 'Raleway', sans-serif; font-size: 11px; font-weight: 600;
+      letter-spacing: 2.5px; text-transform: uppercase;
+      cursor: pointer;
+      transition: filter .25s, transform .2s, box-shadow .25s;
+    }
+    .btn-primary:hover  { filter:brightness(1.1); transform:translateY(-2px); box-shadow:0 10px 28px rgba(201,168,76,.35); }
+    .btn-primary:active { transform:translateY(0); }
+    .btn-primary:disabled { opacity:.5; cursor:not-allowed; transform:none; }
+
+    .spinner {
+      width: 14px; height: 14px;
+      border: 2px solid transparent; border-top-color: var(--navy);
+      border-radius: 50%;
+      animation: spin .7s linear infinite;
+    }
+
+    /* ─── Success ─── */
+    .success-view { text-align: center; padding: 44px 16px; }
+    .check-ring { margin: 0 auto 24px; }
+    .check-path { stroke-dasharray: 40; stroke-dashoffset: 40; animation: checkIn .6s .2s ease forwards; }
+    .success-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 34px; font-style: italic; color: var(--gold-light); margin-bottom: 12px;
+    }
+    .success-text {
+      font-size: 14px; color: rgba(249,244,232,.65);
+      line-height: 1.9; max-width: 320px; margin: 0 auto 32px;
+    }
+    .btn-ghost {
+      background: transparent;
+      border: 1px solid rgba(201,168,76,.35);
+      color: var(--gold);
+      font-family: 'Raleway', sans-serif; font-size: 11px;
+      letter-spacing: 1.5px; text-transform: uppercase;
+      cursor: pointer; padding: 11px 24px; border-radius: 5px;
+      transition: border-color .25s, background .25s;
+    }
+    .btn-ghost:hover { border-color:var(--gold); background:rgba(201,168,76,.08); }
+
+    /* ─── Footer ─── */
+    .footer {
+      margin-top: 36px; text-align: center;
+    }
+    .footer-sig {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 13px; font-style: italic;
+      color: rgba(249,244,232,.25);
+      margin-top: 14px; letter-spacing: .3px;
+    }
+    .admin-trigger {
+      background: none; border: none; cursor: pointer;
+      color: rgba(249,244,232,.1); font-size: 11px;
+      margin-top: 22px; letter-spacing: 1px;
+      font-family: 'Raleway', sans-serif;
+      transition: color .3s;
+    }
+    .admin-trigger:hover { color: rgba(201,168,76,.3); }
+    .admin-prompt {
+      display: none; margin-top: 14px;
+      flex-direction: row; gap: 8px;
+      max-width: 280px; margin-left: auto; margin-right: auto;
+    }
+    .admin-prompt.open { display: flex; }
+    .admin-error {
+      font-size: 10px; color: #e07070; margin-top: 6px; display: none;
+    }
+    .admin-error.visible { display: block; }
+
+    /* ─── Admin panel ─── */
+    .admin-view { padding: 4px 0; }
+    .admin-header {
+      display: flex; justify-content: space-between; align-items: flex-start;
+      flex-wrap: wrap; gap: 12px; margin-bottom: 28px;
+    }
+    .admin-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 24px; font-style: italic; color: var(--gold-light);
+    }
+    .admin-subtitle {
+      font-size: 11px; color: rgba(249,244,232,.45);
+      letter-spacing: 1.5px; text-transform: uppercase; margin-top: 4px;
+    }
+    .guest-card {
+      background: rgba(255,255,255,.03);
+      border: 1px solid rgba(201,168,76,.18);
+      border-radius: 7px; padding: 16px 20px; margin-bottom: 10px;
+    }
+    .guest-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 20px; color: var(--gold-light); font-weight: 600;
+    }
+    .guest-detail {
+      font-size: 12px; color: rgba(249,244,232,.6);
+      margin-top: 4px; line-height: 1.7;
+    }
+    .guest-date {
+      font-size: 10px; color: rgba(249,244,232,.3);
+      letter-spacing: .5px;
+    }
+    .empty-msg {
+      text-align: center; padding: 40px 0;
+      color: rgba(249,244,232,.4); font-size: 13px;
+    }
+    .loading-ring {
+      width: 32px; height: 32px;
+      border: 2px solid rgba(201,168,76,.25);
+      border-top-color: var(--gold);
+      border-radius: 50%;
+      animation: spin .9s linear infinite;
+      margin: 32px auto;
+    }
+
+    /* ─── Radio buttons ─── */
+    .radio-group { display: flex; gap: 12px; flex-wrap: wrap; }
+    .radio-option { flex: 1; min-width: 120px; }
+    .radio-option input[type="radio"] {
+      display: none;
+    }
+    .radio-option label {
+      display: flex; align-items: center; justify-content: center;
+      gap: 8px; cursor: pointer;
+      padding: 13px 14px; width: 100%;
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(201,168,76,.22);
+      border-radius: 5px;
+      font-size: 13px; letter-spacing: .5px;
+      text-transform: none; color: rgba(249,244,232,.7);
+      font-weight: 400;
+      transition: border-color .25s, background .25s, color .25s;
+    }
+    .radio-option input[type="radio"]:checked + label {
+      border-color: var(--gold);
+      background: rgba(201,168,76,.1);
+      color: var(--gold-light);
+    }
+    .radio-option label::before {
+      content: '';
+      width: 14px; height: 14px; flex-shrink: 0;
+      border: 1px solid rgba(201,168,76,.4);
+      border-radius: 50%;
+      transition: border-color .25s, background .25s, box-shadow .25s;
+    }
+    .radio-option input[type="radio"]:checked + label::before {
+      border-color: var(--gold);
+      background: var(--gold);
+      box-shadow: inset 0 0 0 3px var(--navy-mid);
+    }
+
+    /* ─── Collapsible presence block ─── */
+    .presence-block {
+      background: rgba(201,168,76,.04);
+      border: 1px solid rgba(201,168,76,.15);
+      border-radius: 8px; padding: 20px;
+      display: flex; flex-direction: column; gap: 20px;
+      overflow: hidden;
+      max-height: 0; padding: 0 20px; opacity: 0;
+      transition: max-height .45s ease, opacity .35s ease, padding .35s ease;
+    }
+    .presence-block.open {
+      max-height: 1200px; padding: 20px; opacity: 1;
+    }
+
+    /* ─── Guest name blocks ─── */
+    .guest-names-block {
+      background: rgba(201,168,76,.05);
+      border: 1px solid rgba(201,168,76,.18);
+      border-radius: 8px; padding: 18px 20px;
+    }
+    .guest-names-block .block-label {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 15px; font-style: italic;
+      color: var(--gold); margin-bottom: 14px;
+    }
+    .guest-names-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 12px;
+    }
+
+    /* ─── Responsive ─── */
+    @media (max-width: 400px) {
+      .form-grid-2 { grid-template-columns: 1fr; }
+      .radio-group  { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Stars background -->
+  <div class="stars-bg" id="stars"></div>
+
+  <div class="page">
+
+    <!-- ── Header ── -->
+    <header class="header">
+      <div class="line-ornament fade-up">
+        <div class="line line-l"></div>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+          <path d="M12 2L13.5 9L20 8L14.5 12L18 19L12 15L6 19L9.5 12L4 8L10.5 9Z" fill="#C9A84C" opacity=".85"/>
+        </svg>
+        <div class="line line-r"></div>
+      </div>
+
+      <p class="eyebrow fade-up-1">5 Septembre 2026</p>
+
+      <h1 class="names fade-up-2">
+        <span class="gold-shimmer">Jesse</span>
+        <span class="amp">&amp;</span>
+        <span class="gold-shimmer">Gaëlle</span>
+      </h1>
+
+      <div class="diamond-divider fade-up-3">
+        <div class="dl"></div>
+        <svg width="9" height="9" viewBox="0 0 9 9" fill="#C9A84C" opacity=".65"><path d="M4.5 0L9 4.5L4.5 9L0 4.5Z"/></svg>
+        <div class="dr"></div>
+      </div>
+
+      <p class="intro fade-up-4">
+        Le grand jour approche et votre présence compte énormément pour nous.
+        Afin d'organiser au mieux cette journée inoubliable, nous vous remercions
+        de bien vouloir compléter le formulaire ci-dessous.
+      </p>
+    </header>
+
+    <!-- ── Card ── -->
+    <div class="card fade-up-5">
+      <div class="corner-br"></div>
+      <div class="corner-bl"></div>
+
+      <!-- FORM VIEW -->
+      <div id="form-view">
+        <p class="card-title">Votre présence</p>
+        <div class="diamond-divider" style="margin-bottom:28px;">
+          <div class="dl"></div>
+          <svg width="9" height="9" viewBox="0 0 9 9" fill="#C9A84C" opacity=".5"><path d="M4.5 0L9 4.5L4.5 9L0 4.5Z"/></svg>
+          <div class="dr"></div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:20px;">
+
+          <!-- Nom / Prénom -->
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label for="nom">Nom</label>
+              <input type="text" id="nom" placeholder="Votre nom" autocomplete="family-name" />
+              <span class="field-error" id="err-nom">Champ requis</span>
+            </div>
+            <div class="form-group">
+              <label for="prenom">Prénom</label>
+              <input type="text" id="prenom" placeholder="Votre prénom" autocomplete="given-name" />
+              <span class="field-error" id="err-prenom">Champ requis</span>
+            </div>
+          </div>
+
+          <!-- Email -->
+          <div class="form-group">
+            <label for="email">Adresse email</label>
+            <input type="email" id="email" placeholder="votre@email.fr" autocomplete="email" />
+            <span class="field-error" id="err-email">Email invalide</span>
+          </div>
+
+          <!-- Présent -->
+          <div class="form-group">
+            <label>Serez-vous présent(e) ?</label>
+            <div class="radio-group">
+              <div class="radio-option">
+                <input type="radio" name="present" id="present-oui" value="Oui" onchange="onPresentChange()" />
+                <label for="present-oui">Oui, avec joie !</label>
+              </div>
+              <div class="radio-option">
+                <input type="radio" name="present" id="present-non" value="Non" onchange="onPresentChange()" />
+                <label for="present-non">Non, je ne pourrai pas</label>
+              </div>
+            </div>
+            <span class="field-error" id="err-present">Veuillez choisir une option</span>
+          </div>
+
+          <!-- Bloc conditionnel (visible si Oui) -->
+          <div class="presence-block" id="presence-block">
+
+            <!-- Nb adultes / enfants -->
+            <div class="form-grid-2">
+              <div class="form-group">
+                <label for="nb-adultes">Nombre d'adultes</label>
+                <input type="number" id="nb-adultes" min="1" max="20" value="1" oninput="updateGuestFields()" />
+                <span class="field-error" id="err-adultes">Au moins 1 adulte</span>
+              </div>
+              <div class="form-group">
+                <label for="nb-enfants">Nombre d'enfants</label>
+                <input type="number" id="nb-enfants" min="0" max="10" value="0" oninput="updateGuestFields()" />
+              </div>
+            </div>
+
+            <!-- Prénoms adultes -->
+            <div class="guest-names-block" id="adults-block">
+              <p class="block-label">Prénom(s) des adultes</p>
+              <div class="guest-names-grid" id="adults-grid"></div>
+            </div>
+
+            <!-- Infos enfants -->
+            <div class="guest-names-block" id="children-block" style="display:none;">
+              <p class="block-label">Informations des enfants</p>
+              <div id="children-grid" style="display:flex;flex-direction:column;gap:12px;"></div>
+            </div>
+
+          </div><!-- /presence-block -->
+
+          <button class="btn-primary" id="submit-btn" onclick="handleSubmit()">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M1 7L13 7M8 2L13 7L8 12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Envoyer ma réponse
+          </button>
+
+        </div>
+      </div>
+
+      <!-- SUCCESS VIEW -->
+      <div id="success-view" class="success-view" style="display:none;">
+        <svg class="check-ring" width="68" height="68" viewBox="0 0 68 68" fill="none">
+          <circle cx="34" cy="34" r="31" stroke="#C9A84C" stroke-width="1.2" stroke-dasharray="5 4" opacity=".45"/>
+          <circle cx="34" cy="34" r="22" stroke="#C9A84C" stroke-width="1" opacity=".25"/>
+          <path class="check-path" d="M22 34L30 42L46 26" stroke="#C9A84C" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <p class="success-title">Merci !</p>
+        <p class="success-text">
+          Votre réponse a bien été enregistrée.<br>
+          Jesse &amp; Gaëlle ont hâte de vous retrouver le 5 septembre 2026.
+        </p>
+        <div class="diamond-divider" style="margin-bottom:28px;"><div class="dl"></div><svg width="9" height="9" viewBox="0 0 9 9" fill="#C9A84C" opacity=".5"><path d="M4.5 0L9 4.5L4.5 9L0 4.5Z"/></svg><div class="dr"></div></div>
+        <button class="btn-ghost" onclick="resetForm()">Ajouter une autre réponse</button>
+      </div>
+
+    </div><!-- /card -->
+
+    <!-- ── Footer ── -->
+    <footer class="footer">
+      <div class="diamond-divider"><div class="dl"></div><svg width="9" height="9" viewBox="0 0 9 9" fill="#C9A84C" opacity=".4"><path d="M4.5 0L9 4.5L4.5 9L0 4.5Z"/></svg><div class="dr"></div></div>
+      <p class="footer-sig">Jesse &amp; Gaëlle · 5 septembre 2026</p>
+      <button class="admin-trigger" onclick="toggleAdminPrompt()">···</button>
+      <div class="admin-prompt" id="admin-prompt">
+        <input type="password" id="admin-code" placeholder="Code d'accès"
+          style="font-size:12px;padding:9px 12px;"
+          onkeydown="if(event.key==='Enter') checkAdmin()" />
+        <button class="btn-ghost" style="padding:9px 14px;font-size:10px;" onclick="checkAdmin()">OK</button>
+      </div>
+      <p class="admin-error" id="admin-error">Code incorrect</p>
+    </footer>
+
+  </div><!-- /page -->
+
+  <!-- ============================================================
+       ADMIN PANEL  (modal overlay)
+  ============================================================ -->
+  <div id="admin-overlay" style="
+    display:none; position:fixed; inset:0; z-index:100;
+    background:rgba(11,26,56,.96); backdrop-filter:blur(6px);
+    overflow-y:auto; padding:40px 16px 60px;
+    animation: fadeUp .5s ease both;
+  ">
+    <div style="max-width:540px;margin:0 auto;">
+      <div class="admin-header">
+        <div>
+          <p class="admin-title">Liste des invités</p>
+          <p class="admin-subtitle" id="admin-stats">Chargement…</p>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <button class="btn-ghost" style="font-size:10px;padding:9px 16px;" onclick="exportCSV()">Export CSV</button>
+          <button class="btn-ghost" style="font-size:10px;padding:9px 16px;" onclick="closeAdmin()">✕ Fermer</button>
+        </div>
+      </div>
+      <div id="admin-list"></div>
+    </div>
+  </div>
+
+  <script>
+    /* ───────────────────────────────────────────────
+       STARS BACKGROUND
+    ─────────────────────────────────────────────── */
+    (function() {
+      const container = document.getElementById('stars');
+      for (let i = 0; i < 22; i++) {
+        const s = document.createElement('div');
+        s.className = 'star';
+        const size = i % 4 === 0 ? 3 : 2;
+        s.style.cssText = `
+          width:${size}px; height:${size}px;
+          left:${(i*37+11)%100}%;
+          top:${(i*53+7)%100}%;
+          --dur:${3+(i%3)*0.8}s;
+          --delay:${(i*0.45)%3}s;
+          opacity:${0.08+(i%5)*0.04};
+        `;
+        container.appendChild(s);
+      }
+    })();
+
+    /* ───────────────────────────────────────────────
+       PRÉSENCE TOGGLE
+    ─────────────────────────────────────────────── */
+    function onPresentChange() {
+      const isPresent = document.getElementById('present-oui').checked;
+      const block = document.getElementById('presence-block');
+      block.classList.toggle('open', isPresent);
+      if (isPresent) updateGuestFields();
+    }
+
+    /* ───────────────────────────────────────────────
+       CHAMPS DYNAMIQUES ADULTES / ENFANTS
+    ─────────────────────────────────────────────── */
+    function updateGuestFields() {
+      updateAdultFields();
+      updateChildrenFields();
+    }
+
+    function updateAdultFields() {
+      const n    = Math.max(1, Math.min(20, parseInt(document.getElementById('nb-adultes').value) || 1));
+      const grid = document.getElementById('adults-grid');
+      // Preserve existing values
+      const existing = Array.from(grid.querySelectorAll('input[type="text"]')).map(i => i.value);
+      grid.innerHTML = '';
+      for (let i = 0; i < n; i++) {
+        grid.innerHTML += `
+          <div class="form-group">
+            <label>Adulte ${i + 1}</label>
+            <input type="text" id="adult-name-${i}" placeholder="Prénom" value="${escHtml(existing[i] || '')}" />
+            <span class="field-error" id="err-adult-${i}">Champ requis</span>
+          </div>`;
+      }
+    }
+
+    function updateChildrenFields() {
+      const n     = Math.max(0, Math.min(10, parseInt(document.getElementById('nb-enfants').value) || 0));
+      const block = document.getElementById('children-block');
+      const grid  = document.getElementById('children-grid');
+      block.style.display = n > 0 ? 'block' : 'none';
+      // Preserve existing values
+      const existingNames = Array.from(grid.querySelectorAll('input[type="text"]')).map(i => i.value);
+      const existingAges  = Array.from(grid.querySelectorAll('input[type="number"]')).map(i => i.value);
+      grid.innerHTML = '';
+      for (let i = 0; i < n; i++) {
+        grid.innerHTML += `
+          <div>
+            <p style="font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);margin-bottom:10px;font-weight:500;">Enfant ${i + 1}</p>
+            <div class="form-grid-2">
+              <div class="form-group">
+                <label>Prénom</label>
+                <input type="text" id="child-name-${i}" placeholder="Prénom" value="${escHtml(existingNames[i] || '')}" />
+                <span class="field-error" id="err-child-name-${i}">Champ requis</span>
+              </div>
+              <div class="form-group">
+                <label>Âge</label>
+                <div class="age-wrap">
+                  <input type="number" id="child-age-${i}" min="0" max="17" placeholder="Âge"
+                    value="${escHtml(existingAges[i] || '')}" />
+                  <span class="age-unit">ans</span>
+                </div>
+                <span class="field-error" id="err-child-age-${i}">0 – 17 ans requis</span>
+              </div>
+            </div>
+          </div>`;
+      }
+    }
+
+    /* ───────────────────────────────────────────────
+       VALIDATION
+    ─────────────────────────────────────────────── */
+    function clearErrors() {
+      document.querySelectorAll('.field-error').forEach(el => el.classList.remove('visible'));
+    }
+    function showError(id) {
+      const el = document.getElementById(id);
+      if (el) el.classList.add('visible');
+    }
+    function validate() {
+      clearErrors();
+      let ok = true;
+      if (!document.getElementById('nom').value.trim())    { showError('err-nom');    ok = false; }
+      if (!document.getElementById('prenom').value.trim()) { showError('err-prenom'); ok = false; }
+      const email = document.getElementById('email').value.trim();
+      if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showError('err-email'); ok = false; }
+
+      const present = document.querySelector('input[name="present"]:checked');
+      if (!present) { showError('err-present'); ok = false; return ok; }
+
+      if (present.value === 'Oui') {
+        const nAdults = parseInt(document.getElementById('nb-adultes').value) || 0;
+        if (nAdults < 1) { showError('err-adultes'); ok = false; }
+        for (let i = 0; i < nAdults; i++) {
+          if (!document.getElementById(`adult-name-${i}`)?.value.trim()) {
+            showError(`err-adult-${i}`); ok = false;
+          }
+        }
+
+        const nKids = parseInt(document.getElementById('nb-enfants').value) || 0;
+        for (let i = 0; i < nKids; i++) {
+          if (!document.getElementById(`child-name-${i}`)?.value.trim()) {
+            showError(`err-child-name-${i}`); ok = false;
+          }
+          const age = document.getElementById(`child-age-${i}`)?.value;
+          if (age === '' || age === undefined || parseInt(age) < 0 || parseInt(age) > 17) {
+            showError(`err-child-age-${i}`); ok = false;
+          }
+        }
+      }
+      return ok;
+    }
+
+    /* ───────────────────────────────────────────────
+       GOOGLE FORMS SUBMIT
+    ─────────────────────────────────────────────── */
+    async function submitToGoogleForm(data) {
+      const cfg = GOOGLE_FORM_CONFIG;
+      const url = `https://docs.google.com/forms/d/e/${cfg.formId}/formResponse`;
+      const body = new URLSearchParams({
+        [cfg.entry_nom]:           data.nom,
+        [cfg.entry_prenom]:        data.prenom,
+        [cfg.entry_email]:         data.email,
+        [cfg.entry_present]:       data.present,
+        [cfg.entry_nb_adultes]:    data.nbAdultes,
+        [cfg.entry_nb_enfants]:    data.nbEnfants,
+        [cfg.entry_adult_names]:   data.adultNames,
+        [cfg.entry_child_info]:    data.childInfo,
+      });
+      await fetch(url, { method: 'POST', mode: 'no-cors', body });
+    }
+
+    /* ───────────────────────────────────────────────
+       LOCAL STORAGE (backup)
+    ─────────────────────────────────────────────── */
+    function saveLocally(data) {
+      try {
+        const list = JSON.parse(localStorage.getItem('rsvp_list') || '[]');
+        list.push({ ...data, createdAt: new Date().toISOString() });
+        localStorage.setItem('rsvp_list', JSON.stringify(list));
+      } catch(e) {}
+    }
+
+    /* ───────────────────────────────────────────────
+       SUBMIT HANDLER
+    ─────────────────────────────────────────────── */
+    async function handleSubmit() {
+      if (!validate()) return;
+      const btn = document.getElementById('submit-btn');
+      btn.disabled = true;
+      btn.innerHTML = `<div class="spinner"></div> Envoi en cours…`;
+
+      const present      = document.querySelector('input[name="present"]:checked')?.value || 'Non';
+      const nAdults      = present === 'Oui' ? (parseInt(document.getElementById('nb-adultes').value) || 0) : 0;
+      const nKids        = present === 'Oui' ? (parseInt(document.getElementById('nb-enfants').value) || 0) : 0;
+
+      const adultNamesArr = [];
+      for (let i = 0; i < nAdults; i++) {
+        adultNamesArr.push(document.getElementById(`adult-name-${i}`)?.value.trim() || '');
+      }
+      const childInfoArr = [];
+      for (let i = 0; i < nKids; i++) {
+        const name = document.getElementById(`child-name-${i}`)?.value.trim() || '';
+        const age  = document.getElementById(`child-age-${i}`)?.value || '?';
+        childInfoArr.push(`${name} (${age} an${parseInt(age) > 1 ? 's' : ''})`);
+      }
+
+      const data = {
+        nom:          document.getElementById('nom').value.trim(),
+        prenom:       document.getElementById('prenom').value.trim(),
+        email:        document.getElementById('email').value.trim(),
+        present,
+        nbAdultes:    present === 'Oui' ? nAdults : 0,
+        nbEnfants:    present === 'Oui' ? nKids   : 0,
+        adultNames:   adultNamesArr.join(', ') || '—',
+        childInfo:    childInfoArr.join(' | ')  || '—',
+      };
+
+      try   { await submitToGoogleForm(data); }
+      catch { /* sauvegarde locale en fallback */ }
+      saveLocally(data);
+
+      document.getElementById('form-view').style.display    = 'none';
+      document.getElementById('success-view').style.display = 'block';
+    }
+
+    function resetForm() {
+      document.getElementById('nom').value   = '';
+      document.getElementById('prenom').value = '';
+      document.getElementById('email').value  = '';
+      document.querySelectorAll('input[name="present"]').forEach(r => r.checked = false);
+      document.getElementById('presence-block').classList.remove('open');
+      document.getElementById('nb-adultes').value = '1';
+      document.getElementById('nb-enfants').value = '0';
+      updateGuestFields();
+      clearErrors();
+      const btn = document.getElementById('submit-btn');
+      btn.disabled = false;
+      btn.innerHTML = `
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M1 7L13 7M8 2L13 7L8 12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Envoyer ma réponse`;
+      document.getElementById('form-view').style.display    = 'block';
+      document.getElementById('success-view').style.display = 'none';
+    }
+
+    // Init adult fields on load
+    updateAdultFields();
+
+    /* ───────────────────────────────────────────────
+       ADMIN
+    ─────────────────────────────────────────────── */
+    const ADMIN_PASSWORD = 'JesseGaelle2026';
+
+    function toggleAdminPrompt() {
+      const p = document.getElementById('admin-prompt');
+      p.classList.toggle('open');
+      if (p.classList.contains('open')) document.getElementById('admin-code').focus();
+    }
+    function checkAdmin() {
+      const code = document.getElementById('admin-code').value;
+      const err  = document.getElementById('admin-error');
+      if (code === ADMIN_PASSWORD) {
+        document.getElementById('admin-prompt').classList.remove('open');
+        document.getElementById('admin-code').value = '';
+        err.classList.remove('visible');
+        openAdmin();
+      } else {
+        err.classList.add('visible');
+      }
+    }
+    function openAdmin() {
+      document.getElementById('admin-overlay').style.display = 'block';
+      renderAdmin();
+    }
+    function closeAdmin() {
+      document.getElementById('admin-overlay').style.display = 'none';
+    }
+
+    function renderAdmin() {
+      const list = JSON.parse(localStorage.getItem('rsvp_list') || '[]')
+        .sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+      const presents = list.filter(g => g.present === 'Oui');
+      const totalAdults   = presents.reduce((s,g) => s + parseInt(g.nbAdultes||0), 0);
+      const totalChildren = presents.reduce((s,g) => s + parseInt(g.nbEnfants||0), 0);
+
+      document.getElementById('admin-stats').textContent =
+        `${list.length} réponse${list.length>1?'s':''} · ${presents.length} présent${presents.length>1?'s':''} · ${totalAdults} adulte${totalAdults>1?'s':''} · ${totalChildren} enfant${totalChildren>1?'s':''}`;
+
+      const container = document.getElementById('admin-list');
+      if (!list.length) {
+        container.innerHTML = '<p class="empty-msg">Aucune réponse locale enregistrée.<br>Consultez votre Google Sheets pour les données complètes.</p>';
+        return;
+      }
+      container.innerHTML = list.map(g => `
+        <div class="guest-card">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;">
+            <div>
+              <p class="guest-name">${escHtml(g.prenom)} ${escHtml(g.nom)}</p>
+              <p class="guest-detail" style="margin-top:3px;">
+                ${escHtml(g.email)}
+              </p>
+              <p class="guest-detail">
+                ${g.present === 'Oui'
+                  ? `✓ Présent · ${g.nbAdultes} adulte${parseInt(g.nbAdultes)>1?'s':''}
+                     ${parseInt(g.nbEnfants)>0 ? `· ${g.nbEnfants} enfant${parseInt(g.nbEnfants)>1?'s':''}` : ''}`
+                  : '✗ Absent'}
+              </p>
+              ${g.present === 'Oui' && g.adultNames && g.adultNames !== '—'
+                ? `<p class="guest-detail" style="color:rgba(249,244,232,.4);">Adultes : ${escHtml(g.adultNames)}</p>` : ''}
+              ${g.present === 'Oui' && g.childInfo && g.childInfo !== '—'
+                ? `<p class="guest-detail" style="color:rgba(249,244,232,.4);">Enfants : ${escHtml(g.childInfo)}</p>` : ''}
+            </div>
+            <p class="guest-date">${new Date(g.createdAt).toLocaleDateString('fr-FR',{day:'numeric',month:'long'})}</p>
+          </div>
+        </div>`).join('');
+    }
+
+    function escHtml(str) {
+      return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    function exportCSV() {
+      const list = JSON.parse(localStorage.getItem('rsvp_list') || '[]');
+      const rows = [['Nom','Prénom','Email','Présent','Nb adultes','Nb enfants','Prénoms adultes','Infos enfants','Date']];
+      list.forEach(g => rows.push([
+        g.nom, g.prenom, g.email, g.present,
+        g.nbAdultes, g.nbEnfants, g.adultNames, g.childInfo,
+        new Date(g.createdAt).toLocaleDateString('fr-FR')
+      ]));
+      const csv  = rows.map(r => r.map(c => `"${String(c||'').replace(/"/g,'""')}"`).join(',')).join('\n');
+      const blob = new Blob(['\uFEFF'+csv], {type:'text/csv;charset=utf-8;'});
+      const url  = URL.createObjectURL(blob);
+      const a    = document.createElement('a');
+      a.href = url; a.download = 'invites-jesse-gaelle.csv'; a.click();
+      URL.revokeObjectURL(url);
+    }
+  </script>
+</body>
+</html>
